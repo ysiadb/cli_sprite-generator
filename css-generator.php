@@ -2,32 +2,32 @@
 
 function getDirContents($dir)
 {
-    
+
     if (file_exists($dir) && is_dir($dir) ) {
         $handle = opendir($dir);
+        print $dir .":" .PHP_EOL;
+
         if (!$handle) return array();
         {
-        $filelist = array();
             while ($entry = readdir($handle)) 
             {
-                        if (is_file($entry)) 
-                        {
-                            $filelist = glob($handle . "*.png");
+                if (is_file($entry)) 
+                {
+                    $filelist = glob($handle . "*.png");
+                    
+                    foreach ($filelist as $file_list)
+                    {
+                        $file_path = '.' .$file_list;
+                        $filelist = $entry;
+                        $filelist = array();
+                        $file_ext = pathinfo($file_path, PATHINFO_EXTENSION);
+                    }
 
-                            foreach ($filelist as $file_list)
-                            {
-                                $file_path = '.' .$file_list;
-                                $filelist[] = $entry;
-                                $file_ext = pathinfo($file_path, PATHINFO_EXTENSION);
-                            }
-
-                        print "- " . $entry .PHP_EOL;
-                        }
-                        
-                
+                        print_r($entry) .PHP_EOL;
+                }
             }
         }
-    }
+    
     closedir($handle);
 }
 // $files= tableau chemin des fichiers, $path_gen = chemin pour sauvegarder l'image générée, largeur, hauteur, espace)
@@ -50,7 +50,7 @@ function sprite($files = array(), $path_gen = '', $imgheight = 100, $imgwidth = 
     // creation de l'image vide
     $height = $imgheight;
     $img = imagecreatetruecolor($width, $height);
-    $background = imagecolorallocate($img, 255, 255, 255);
+    $bgc = imagecolorallocate($img, 255, 255, 255);
     //imagefill($img, 0, 0, $background);
     //imagealphablending($img, false);
     //imagesavealpha($img, true);
@@ -87,3 +87,4 @@ function sprite($files = array(), $path_gen = '', $imgheight = 100, $imgwidth = 
 
 }
 
+getDirContents('/home/wac/daisyB-repo/css_generator');
