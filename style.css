@@ -1,1 +1,7 @@
-style.css
+.image- {display: block; width: 2800px; height: 800px; background: url('sprite.png') 2800px 0;} .CrazyDiamond.png{background-position:0-0px; }
+.JoJo_Siwa.png{background-position:2800-800px; }
+.Star_Platinum.png{background-position:5600-1600px; }
+.goldenwing.png{background-position:8400-2400px; }
+.jotarogirl.png{background-position:11200-3200px; }
+.mario.png{background-position:14000-4000px; }
+.sprite.png{background-position:16800-4800px; }

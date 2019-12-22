@@ -84,24 +84,36 @@ function sprite($path, $tab_image = "sprite.png", $content = "style.css")
     
     
                 
-		//$content = ".image-". " {display: block; width: ".$src_w."px; height: ".$src_h."px; background: url('sprite.png') ".$dst_x."px 0;} ";
-        
-		//$dst_x += $size[0];
-        
+    
+    //$dst_x += $size[0];
+    
 	
 	//css_gen(implode("", $content));		
 	imagepng($img, "sprite.png");
-//}
-
-
-
-
+    //}
+    
+    
+    
+    
     //fonction style.css
-// function css_gen($content)
-// {
-	fopen("style.css", "a+");
-	$content = $content;
-	file_put_contents("style.css", $content);
+    // function css_gen($content)
+    // {
+    $w = 0;
+    $h = 0; 
+    $mycss = fopen($path."style.css", "w");
+    fwrite($mycss, ".image-". " {display: block; width: " . $large ."px; height: ".$max_height."px; background: url('sprite.png') ".$dst_x."px 0;} ");
+    
+    foreach($array as $key => $file)
+    {
+        fwrite($mycss, '.' . $file . '{background-position:' . ($large*$w) .'-'.($max_height*$h) .'px; }' .PHP_EOL);
+        $w++;
+        $h++;
+    }
+
+    fclose($mycss);
+
+    // $content = $content;
+	// file_put_contents("style.css", $content);
 //}
 
 // //function sprite($argv)
