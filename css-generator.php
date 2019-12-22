@@ -1,89 +1,123 @@
 <?php
 
-function getDirContents($path)
+function sprite($path, $tab_image = "sprite.png", $content = "style.css")
 {
+//     $is_ok = in_array('-r', $argv);
 
-    if (file_exists($path) && is_dir($path) ) 
-    {
-        $handle = opendir($path);
-        print_r($path .":" .PHP_EOL);
+//     if(!$is_ok)
+//     {
+//         $tab_img = my_scandir($argv[1]);
+//         sprite_gen($tab_img);
+//     }
+//     else
+//     {
+//         echo 'error' . PHP_EOL ;
+//     }
+// }
 
 
-            while ($entry = readdir($handle)) 
-            {
-                if (is_file($entry)) 
+// function my_scandir($path)
+// {
+        //$files = [];
+        
+        if ($handle = opendir($path)) 
+        {
+            while (false !== ($entry = readdir($handle)))
+            {                
+                $array = array();
+
+                foreach (glob('*.png') as $entry)
                 {
-                    $filepng = glob(/*$handle .*/"*.png");
+                    array_push($array, $entry);
                     
-                    foreach ($filepng as $file_png)
-                    {
-                        $file_path = '.' .$file_png;
-                        $file_png = array($entry);
-                        $file_ext = pathinfo($file_path, PATHINFO_EXTENSION);
-                    }
-
-                        print_r($entry) .PHP_EOL;
+                    // if ($entry != "." && $entry != "..")
+                    // {
+                    //     $files[] = $path . '/' . $entry;
+                    // }
                 }
             }
+            print_r($array);
+            //closedir($handle);
         }
-    
-    closedir($handle);
-}
-// $files= tableau chemin des fichiers, $path_gen = chemin pour sauvegarder l'image générée, largeur, hauteur, espace)
-function sprite($files = array(), $path_gen = '', $imgheight = 100, $imgwidth = 100, $spacing = 0)
-{
-    $files_tmp = array();
-    $width = 0;
-    
-    foreach ($files as $file) 
-    {
-        list($h, $w, $t) = getimagesize($file);
 
-        if (($h == $imgheight) && ($w == $imgwidth))
+        else
         {
-            $width += ($spacing + $imgwidth);
-            $files_tmp[] = array('file' => $file, 'type' => $t);
+            echo "ATTENTION /!\ : Le dossier n'existe pas." . PHP_EOL;
         }
+
+        //return $files;
+    //}
+
+
+//         //Fonction sprite.png
+
+// function sprite_gen($array)
+// {
+    $imgh = 400;
+    $imgl = 400;
+    $space = 0;
+    $max_height = $imgh + $space + $imgh;
+    $large = 0;
+    $dst_x = 0;
+    $array_img = array();
+
+
+    foreach ($array as $imge) 
+    {
+        $size[] = getimagesize($imge);
+		$src_w = $size[0];
+        $src_h = $size[1];
+        $large += ($space + $imgl);
+        $array_img[] = array('image' => $imge);
     }
-
-    // creation de l'image vide
-    $height = $imgheight;
-    $img = imagecreatetruecolor($width, $height);
-    $bgc = imagecolorallocate($img, 255, 255, 255);
-
-
-    //ajout des images
-    $position = 0;
-
-    foreach ($files_tmp as $file)
+    print_r($size);
+    
+    $img = imagecreatetruecolor($large, $imgh);
+    
+    foreach ($array_img as $imge)
     {
-        if ($file['type'] == IMAGETYPE_PNG) 
-        {
-            $tmp = imagecreatefrompng($file['sprite.png']);
-        }
-        else 
-        {
-            die('ERREUR : Cette image n\'est pas au format PNG');
-        }
-        
-        imagecopy($img, $tmp, $position, 0, 0, 0, $imgwidth, $imgheight);
-        $position += ($spacing + $imgwidth);
-        
-        //affiche l'image
-        //if (empty($path_gen))
-        //{
-            //header('Content-Type: image/png');
-            imagepng($img, 'home/wac/daisyB-repo/css_generator/sprite.png');
-            //}
-            //else 
-            //{
-                //imagepng($img, $path_gen);
-                //}
-                //imagedestroy($tmp);
+    $src = imagecreatefrompng($imge['image']);
+    imagecopy($img, $src, $dst_x, 0, 0, 0, $imgl, $imgh);
+    $dst_x += ($space + $imgh);
+    
+    }
+    
+    
                 
-    }
+		//$content = ".image-". " {display: block; width: ".$src_w."px; height: ".$src_h."px; background: url('sprite.png') ".$dst_x."px 0;} ";
+        
+		//$dst_x += $size[0];
+        
+	
+	//css_gen(implode("", $content));		
+	imagepng($img, "sprite.png");
+//}
 
+
+
+
+    //fonction style.css
+// function css_gen($content)
+// {
+	fopen("style.css", "a+");
+	$content = $content;
+	file_put_contents("style.css", $content);
+//}
+
+// //function sprite($argv)
+// //{
+//     $is_ok = in_array('-r', $argv);
+
+//     if(!$is_ok)
+//     {
+//         $tab_image = my_scandir($argv[1]);
+//         sprite_gen($tab_image);
+//     }
+//     else
+//     {
+//         echo 'error' . PHP_EOL ;
+//     }
+// //}
 }
 
-getDirContents('/home/wac/daisyB-repo/css_generator');
-sprite(array('mario.png', 'fortnite.png'), 'home/wac/daisyB-repo/css_generator/');
+sprite($argv[1]);
